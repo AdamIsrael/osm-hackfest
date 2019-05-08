@@ -14,7 +14,7 @@
 # laptop, average install hook time went from ~7min down to ~1 minute.
 function usage(){
     echo -e "usage: ./bin/update-juju-lxc-images [Optional flags]"
-    echo -e "This script will automatically cache all LTS series by default (trusty, xenial, and bionic)"
+    echo -e "This script will automatically cache all LTS series by default (trusty, xenial, bionic)"
     echo -e ""
     echo -e "Optional flags"
     echo -e "=================="
@@ -69,7 +69,7 @@ BIONIC_PACKAGES="virtualenv"
 # Predownload common packages used by your charms in development
 DOWNLOAD_PACKAGES=
 
-CLOUD_INIT_PACKAGES="tmux curl bridge-utils cloud-image-utils cloud-utils cpu-checker distro-info genisoimage libaio1 libibverbs1 libnl-3-200 libnl-route-3-200 libnspr4 libnss3 librados2 librbd1 msr-tools qemu-block-extra qemu-utils sharutils ubuntu-fan"
+CLOUD_INIT_PACKAGES="curl cpu-checker bridge-utils cloud-utils tmux ubuntu-fan"
 
 PACKAGES="$LAYER_BASIC $DOWNLOAD_PACKAGES"
 
@@ -87,9 +87,9 @@ function cache() {
     lxc launch ubuntu:$series $container
     sleep 15  # wait for network
 
-    lxc exec $container -- apt update -y
-    lxc exec $container -- apt upgrade -y
-    lxc exec $container -- apt install -y $CLOUD_INIT_PACKAGES $PACKAGES $2
+    lxc exec $container -- apt-get update -y
+    lxc exec $container -- apt-get upgrade -y
+    lxc exec $container -- apt-get install -y $CLOUD_INIT_PACKAGES $PACKAGES $2
 
     # Install juju agent
     echo "Installing Juju agent $JUJU_FULL_VERSION"
